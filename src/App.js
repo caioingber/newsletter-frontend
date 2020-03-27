@@ -18,9 +18,9 @@ class App extends Component {
       validLast: false,
       success: false,
       errors: {
-        first: "First name is a required field",
-        last: "Last name is a required field",
-        email: "email is a required field"
+        first: "*required",
+        last: "*required",
+        email: "*required"
       }
     };
   }
@@ -34,25 +34,37 @@ class App extends Component {
     this.handleValidation(value, input);
   };
 
-  handleSubmit = (e, x) => {
+  handleSubmit = e => {
     e.preventDefault();
+    if (
+      this.state.validFirst &&
+      this.state.validLast &&
+      this.state.validEmail
+    ) {
+      console.log("You have been signed up!");
+    } else {
+      let errors = this.state.errors;
+      alert(`${errors.first}\n${errors.last}\n${errors.email}\n`);
+    }
     console.log(this.state);
   };
 
   handleValidation = (value, field) => {
+    let errors = { ...this.state.errors };
     if (field == "firstName") {
       if (value) {
-        let errors = { ...this.state.errors };
-        errors.first = "";
         this.setState({ errors: errors });
-        let specChar = new RegExp(/^[A-Za-z0-9 ]+$/);
+        let specChar = new RegExp(/^[A-Za-z]+$/);
         if (!specChar.test(value)) {
-          errors.first = "Name cannot contain special characters";
-          this.setState({ errors: errors });
+          errors.first = "Name cannot contain special characters or numbers";
+          this.setState({ validFirst: false, errors: errors });
         } else {
           errors.first = "";
           this.setState({ validFirst: true, errors: errors });
         }
+      } else {
+        errors.first = "*required";
+        this.setState({ validFirst: false, errors: errors });
       }
     }
     if (field == "lastName") {
@@ -60,14 +72,17 @@ class App extends Component {
         let errors = { ...this.state.errors };
         errors.last = "";
         this.setState({ errors: errors });
-        let specChar = new RegExp(/^[A-Za-z0-9 ]+$/);
+        let specChar = new RegExp(/^[A-Za-z]+$/);
         if (!specChar.test(value)) {
-          errors.last = "Name cannot contain special characters";
-          this.setState({ errors: errors });
+          errors.last = "Name cannot contain special characters or numbers";
+          this.setState({ validLast: false, errors: errors });
         } else {
           errors.last = "";
           this.setState({ validLast: true, errors: errors });
         }
+      } else {
+        errors.last = "*required";
+        this.setState({ validLast: false, errors: errors });
       }
     }
     if (field == "email") {
@@ -75,14 +90,16 @@ class App extends Component {
         let errors = { ...this.state.errors };
         errors.email = "";
         this.setState({ errors: errors });
-        let specChar = new RegExp(/^[@]+[.]$/);
         if (!value.includes("@") || !value.includes(".")) {
           errors.email = "email must contain an '@' followed by a '.'";
-          this.setState({ errors: errors });
+          this.setState({ validEmail: false, errors: errors });
         } else {
           errors.email = "";
           this.setState({ validEmail: true, errors: errors });
         }
+      } else {
+        errors.email = "*required";
+        this.setState({ validEmail: false, errors: errors });
       }
     }
   };
@@ -92,18 +109,20 @@ class App extends Component {
     return (
       <div className="App">
         This is the app
-        <Route path="/" exact component={About} />
-        <Route
-          path="/signup"
-          render={props => (
-            <SignUp
-              {...props}
-              info={this.state}
-              change={this.handleChange}
-              submit={this.handleSubmit}
-            />
-          )}
-        />
+        <main>
+          <Route path="/" exact component={About} />
+          <Route
+            path="/signup"
+            render={props => (
+              <SignUp
+                {...props}
+                info={this.state}
+                change={this.handleChange}
+                submit={this.handleSubmit}
+              />
+            )}
+          />
+        </main>
       </div>
     );
   }
