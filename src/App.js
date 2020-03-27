@@ -10,8 +10,8 @@ class App extends Component {
     super(props);
 
     this.state = {
-      firstName: "",
-      lastName: "",
+      first_name: "",
+      last_name: "",
       email: "",
       validFirst: false,
       validEmail: false,
@@ -35,12 +35,21 @@ class App extends Component {
   };
 
   handleSubmit = e => {
+    let data = {
+      first_name: this.state.first_name,
+      last_name: this.state.last_name,
+      email: this.state.email
+    } 
     e.preventDefault();
     if (
       this.state.validFirst &&
       this.state.validLast &&
       this.state.validEmail
     ) {
+      axios.post('http://127.0.0.1:8000/contacts/new',data)
+      .then(res => console.log(res))
+      .catch(err => console.log(err))
+
       console.log("You have been signed up!");
     } else {
       let errors = this.state.errors;
@@ -51,7 +60,7 @@ class App extends Component {
 
   handleValidation = (value, field) => {
     let errors = { ...this.state.errors };
-    if (field == "firstName") {
+    if (field == "first_name") {
       if (value) {
         this.setState({ errors: errors });
         let specChar = new RegExp(/^[A-Za-z]+$/);
@@ -67,7 +76,7 @@ class App extends Component {
         this.setState({ validFirst: false, errors: errors });
       }
     }
-    if (field == "lastName") {
+    if (field == "last_name") {
       if (value) {
         let errors = { ...this.state.errors };
         errors.last = "";

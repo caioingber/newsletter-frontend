@@ -14,22 +14,22 @@ const SignUp = props => {
     <div className="form-container">
       <Form onSubmit={props.submit}>
         <FormGroup>
-          <Label for="firstName">First Name</Label>
+          <Label for="first_name">First Name</Label>
           <Input
             type="text"
-            name="firstName"
-            id="firstName"
+            name="first_name"
+            id="first_name"
             placeholder="John"
             onChange={props.change}
           />
           <FormText color="danger">{props.info.errors.first}</FormText>
         </FormGroup>
         <FormGroup>
-          <Label for="lastName">Last Name</Label>
+          <Label for="last_name">Last Name</Label>
           <Input
             type="text"
-            name="lastName"
-            id="lastName"
+            name="last_name"
+            id="last_name"
             placeholder="Smith"
             onChange={props.change}
           />
