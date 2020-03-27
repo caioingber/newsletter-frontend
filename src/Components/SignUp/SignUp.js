@@ -10,9 +10,8 @@ import {
 } from "reactstrap";
 
 const SignUp = props => {
-  console.log(props.info);
   return (
-    <Form>
+    <Form onSubmit={props.submit}>
       <FormGroup>
         <Label for="firstName">First Name</Label>
         <Input
